@@ -27,16 +27,16 @@ mkdir ${SCRIPTS_DIR}
 cat > ${LOGIN_SCRIPT} << EOF
 
 # Check that the SSH client did not supply a command
-if [[ -z $SSH_ORIGINAL_COMMAND ]]; then
+if [[ -z ${SSH_ORIGINAL_COMMAND} ]]; then
 
-  # The format of log files is ${LOG_DIR}/YYYY-MM-DD_HH-MM-SS_user
+  # The format of log files is ${BASTION_LOG_DIR}/YYYY-MM-DD_HH-MM-SS_user
   LOG_FILE="`date --date="today" "+%Y-%m-%d_%H-%M-%S"`_`whoami`"
   LOG_DIR="${BASTION_LOG_DIR}"
 
   # Print a welcome message
   echo ""
   echo "NOTE: This SSH session will be recorded"
-  echo "AUDIT KEY: $LOG_FILE"
+  echo "AUDIT KEY: ${LOG_FILE}"
   echo ""
 
   # I suffix the log file name with a random string. I explain why
@@ -44,7 +44,7 @@ if [[ -z $SSH_ORIGINAL_COMMAND ]]; then
   SUFFIX=`mktemp -u _XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
 
   # Wrap an interactive shell into "script" to record the SSH session
-  script -qf --timing=$LOG_DIR$LOG_FILE$SUFFIX.time $LOG_DIR$LOG_FILE$SUFFIX.data --command=/bin/bash
+  script -qf --timing=${LOG_DIR}${LOG_FILE}${SUFFIX}.time ${LOG_DIR}${LOG_FILE}${SUFFIX}.data --command=/bin/bash
 
 else
 
