@@ -1,3 +1,45 @@
 #!/usr/bin/env bash
 
-echo "test" > /opt/bootstrap/test.log
+#maintenance and dev mode
+#wget http://169.254.169.254/latest/user-data
+#if [ $? = 0 ]; then
+#  USER_DATA=$(cat user-data)
+#  if [ ${USER_DATA} = "maintenance_mode" ]; then
+#    exit 0
+#  elif [ ${USER_DATA} = "something" ]; then
+#    echo "do something"
+#  fi
+#fi
+
+WORKING_DIR="/opt/bootstrap"
+LOG_DIR="${WORKING_DIR}/logs"
+
+mkdir -p ${LOG_DIR}
+
+#start bootstrap
+wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/variables
+wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/audit_sessions.sh
+wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/manage_users.sh
+wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/cronjobs.sh
+
+chmod +x *.sh
+./audit_sessions.sh
+./manage_users.sh
+./cronjobs.sh
+
+# Install packages
+# kops
+wget -O kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x ./kops
+mv ./kops /usr/local/bin/
+
+# kubectl
+wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+
+# helm
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+

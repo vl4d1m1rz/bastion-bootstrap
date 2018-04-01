@@ -1,0 +1,1 @@
+export BASTION_LOGS_BUCKET=com.owlytics.bastion.logs
