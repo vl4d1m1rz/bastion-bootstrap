@@ -24,7 +24,7 @@ echo "X11Forwarding no" >> /etc/ssh/sshd_config
 
 mkdir ${SCRIPTS_DIR}
 
-cat > ${LOGIN_SCRIPT} << "EOF"
+cat > ${LOGIN_SCRIPT} << EOF
 
 # Check that the SSH client did not supply a command
 if [[ -z $SSH_ORIGINAL_COMMAND ]]; then
@@ -82,7 +82,7 @@ echo "proc /proc proc defaults,hidepid=2 0 0" >> /etc/fstab
 # 4. For durable storage, the log files are copied at a regular interval to an Amazon S3 bucket
 # BASTION_LOGS_BUCKET is environment variable in /etc/environment
 
-cat > /usr/bin/bastion/sync_s3 << "EOF"
+cat > /usr/bin/bastion/sync_s3 << EOF
 # Copy log files to S3 with server-side encryption enabled.
 # Then, if successful, delete log files that are older than a day.
 LOG_DIR="${BASTION_LOG_DIR}"
