@@ -24,7 +24,7 @@ echo "X11Forwarding no" >> /etc/ssh/sshd_config
 
 mkdir ${SCRIPTS_DIR}
 
-cat > ${LOGIN_SCRIPT} << EOF
+cat > ${LOGIN_SCRIPT} << 'EOF'
 
 # Check that the SSH client did not supply a command
 if [[ -z ${SSH_ORIGINAL_COMMAND} ]]; then
