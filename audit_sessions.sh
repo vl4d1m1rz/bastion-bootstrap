@@ -30,7 +30,7 @@ cat > ${LOGIN_SCRIPT} << EOF
 if [[ -z \${SSH_ORIGINAL_COMMAND} ]]; then
 
   # The format of log files is ${BASTION_LOG_DIR}/YYYY-MM-DD_HH-MM-SS_user
-  LOG_FILE="`date --date="today" "+%Y-%m-%d_%H-%M-%S"`_`whoami`"
+  LOG_FILE="\$(date --date="today" "+%Y-%m-%d_%H-%M-%S")_\$(whoami)"
   LOG_DIR="${BASTION_LOG_DIR}"
 
   # Print a welcome message
