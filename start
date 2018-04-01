@@ -23,9 +23,9 @@ wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/manage
 wget https://raw.githubusercontent.com/vovatikal/bastion-bootstrap/master/cronjobs.sh
 
 chmod +x *.sh
-./audit_sessions.sh
-./manage_users.sh
-./cronjobs.sh
+${WORKING_DIR}/audit_sessions.sh
+${WORKING_DIR}/manage_users.sh
+${WORKING_DIR}/cronjobs.sh
 
 # Install packages
 # kops

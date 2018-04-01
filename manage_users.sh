@@ -9,10 +9,10 @@
 
 source variables
 
-cat > /usr/bin/bastion/sync_users << 'EOF'
+cat > /usr/bin/bastion/sync_users << "EOF"
 
 # The file will log user changes
-LOG_FILE="${LOG_DIR}/users_changelog.txt"
+LOG_FILE="${BASTION_LOG_DIR}/users_changelog.txt"
 
 # The function returns the user name from the public key file name.
 # Example: public-keys/sshuser.pub => sshuser

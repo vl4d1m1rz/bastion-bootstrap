@@ -2,7 +2,7 @@
 
 SCRIPTS_DIR=/usr/bin/bastion
 LOGIN_SCRIPT=${SCRIPTS_DIR}/shell
-LOG_DIR=/var/log/bastion
+BASTION_LOG_DIR=/var/log/bastion
 USER=ubuntu
 GROUP=ubuntu
 

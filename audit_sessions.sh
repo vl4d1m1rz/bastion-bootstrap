@@ -5,12 +5,12 @@
 source variables
 
 # Create a new folder for the log files
-mkdir -p ${LOG_DIR}
+mkdir -p ${BASTION_LOG_DIR}
 
 # Allow user only to access this folder and its content
-chown ${USER}:${GROUP} ${LOG_DIR}
-chmod -R 770 ${LOG_DIR}
-setfacl -Rdm other:0 ${LOG_DIR}
+chown ${USER}:${GROUP} ${BASTION_LOG_DIR}
+chmod -R 770 ${BASTION_LOG_DIR}
+setfacl -Rdm other:0 ${BASTION_LOG_DIR}
 
 # Make OpenSSH execute a custom script on logins
 echo -e "\nForceCommand ${LOGIN_SCRIPT}" >> /etc/ssh/sshd_config
@@ -24,14 +24,14 @@ echo "X11Forwarding no" >> /etc/ssh/sshd_config
 
 mkdir ${SCRIPTS_DIR}
 
-cat > ${LOGIN_SCRIPT} << 'EOF'
+cat > ${LOGIN_SCRIPT} << "EOF"
 
 # Check that the SSH client did not supply a command
 if [[ -z $SSH_ORIGINAL_COMMAND ]]; then
 
   # The format of log files is ${LOG_DIR}/YYYY-MM-DD_HH-MM-SS_user
   LOG_FILE="`date --date="today" "+%Y-%m-%d_%H-%M-%S"`_`whoami`"
-  LOG_DIR="${LOG_DIR}"
+  LOG_DIR="${BASTION_LOG_DIR}"
 
   # Print a welcome message
   echo ""
@@ -82,10 +82,10 @@ echo "proc /proc proc defaults,hidepid=2 0 0" >> /etc/fstab
 # 4. For durable storage, the log files are copied at a regular interval to an Amazon S3 bucket
 # BASTION_LOGS_BUCKET is environment variable in /etc/environment
 
-cat > /usr/bin/bastion/sync_s3 << 'EOF'
+cat > /usr/bin/bastion/sync_s3 << "EOF"
 # Copy log files to S3 with server-side encryption enabled.
 # Then, if successful, delete log files that are older than a day.
-LOG_DIR="${LOG_DIR}"
+LOG_DIR="${BASTION_LOG_DIR}"
 aws s3 cp $LOG_DIR s3://${BASTION_LOGS_BUCKET}/logs/ --sse --region ${REGION} --recursive && find $LOG_DIR* -mtime +1 -exec rm {} \;
 
 EOF
